@@ -1,4 +1,4 @@
-package org.example.exmod.commands;
+package com.github.puzzlots.spc.commands;
 
 import com.github.puzzle.game.commands.CommandManager;
 import com.github.puzzle.game.commands.PuzzleCommandSource;
@@ -9,11 +9,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import finalforeach.cosmicreach.blocks.BlockState;
 import finalforeach.cosmicreach.gamestates.InGame;
 
-public class Commands {
+public class CommandRegistrar {
 
     public static void register() {
-        LiteralArgumentBuilder<PuzzleCommandSource> cmd = CommandManager.literal("setBlock");
-        cmd.then(CommandManager.argument("x", IntegerArgumentType.integer())
+        LiteralArgumentBuilder<PuzzleCommandSource> setblock = CommandManager.literal("setblock");
+        setblock.then(CommandManager.argument("x", IntegerArgumentType.integer())
                 .then(CommandManager.argument("y", IntegerArgumentType.integer())
                         .then(CommandManager.argument("z", IntegerArgumentType.integer())
                                 .then(CommandManager.argument("blockstate", StringArgumentType.greedyString())
@@ -30,7 +30,32 @@ public class Commands {
                         )
                 )
         );
-        CommandManager.dispatcher.register(cmd);
+
+
+
+        LiteralArgumentBuilder<PuzzleCommandSource> give = CommandManager.literal("give");
+
+        give.then(CommandManager.argument("item",StringArgumentType.string())
+                .executes(context -> {
+                    Give.run(StringArgumentType.getString(context,"item"),1);
+                    return 0;
+                })
+                .then(CommandManager.argument("count",IntegerArgumentType.integer(1,1000)).executes(context -> {
+                    Give.run(StringArgumentType.getString(context,"item"),IntegerArgumentType.getInteger(context,"count"));
+                    return 0;
+                })));
+        LiteralArgumentBuilder<PuzzleCommandSource> heal = CommandManager.literal("heal");
+
+        heal.executes(context -> {
+            Heal.run(10);
+            return 0;
+        }).then(CommandManager.argument("count",IntegerArgumentType.integer(-1000,1000)).executes(context -> {
+            Heal.run(IntegerArgumentType.getInteger(context,"count"));
+            return 0;
+        }));
+        CommandManager.dispatcher.register(setblock);
+        CommandManager.dispatcher.register(give);
+        CommandManager.dispatcher.register(heal);
     }
 
 }
