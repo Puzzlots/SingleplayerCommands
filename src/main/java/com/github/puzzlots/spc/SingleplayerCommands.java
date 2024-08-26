@@ -25,9 +25,6 @@ public class SingleplayerCommands implements ModInitializer {
 
     }
 
-    @Subscribe
-    public void onEvent(OnRegisterBlockEvent event) {
-    }
 
     @Subscribe
     public void onEvent(OnPreLoadAssetsEvent event) {

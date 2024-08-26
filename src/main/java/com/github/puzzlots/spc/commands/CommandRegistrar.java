@@ -3,6 +3,7 @@ package com.github.puzzlots.spc.commands;
 import com.github.puzzle.game.commands.CommandManager;
 import com.github.puzzle.game.commands.PuzzleCommandSource;
 import com.github.puzzle.game.util.BlockUtil;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -53,9 +54,29 @@ public class CommandRegistrar {
             Heal.run(IntegerArgumentType.getInteger(context,"count"));
             return 0;
         }));
+        LiteralArgumentBuilder<PuzzleCommandSource> maxHp = CommandManager.literal("setmaxhp");
+
+        maxHp.then(CommandManager.argument("count", FloatArgumentType.floatArg(1,20)).executes(context -> {
+            MaxHP.run(FloatArgumentType.getFloat(context,"count"));
+            return 0;
+        }));
+        LiteralArgumentBuilder<PuzzleCommandSource> clear = CommandManager.literal("clear");
+        clear.executes(context -> {
+            Clear.run();
+            return 0;
+        });
+        LiteralArgumentBuilder<PuzzleCommandSource> killAll = CommandManager.literal("killall");
+        killAll.executes(context -> {
+            KillAll.run();
+            return 0;
+        });
+
         CommandManager.dispatcher.register(setblock);
         CommandManager.dispatcher.register(give);
         CommandManager.dispatcher.register(heal);
+        CommandManager.dispatcher.register(heal);
+        CommandManager.dispatcher.register(maxHp);
+        CommandManager.dispatcher.register(killAll);
     }
 
 }

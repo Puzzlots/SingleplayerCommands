@@ -19,6 +19,7 @@ public class Give {
         }
         else  {
             item = Item.getItem(itemName+"[default]");
+            // check if it's a non block item.
             if(item==null)
                 item = Item.getItem(itemName);
         }
